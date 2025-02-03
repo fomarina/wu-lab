@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>Enhanced Calculator & Contact Form</title>
+<style>
+    div { margin: 20px; }
+    .hidden { display: none; }
+    #submit-button { background-color: gray; color: white; cursor: not-allowed; }
+    #submit-button.enabled { background-color: blue; cursor: pointer; }
+    .info-box { display: none; background-color: #f9f9f9; padding: 10px; border: 1px solid #ccc; margin-top: 5px; }
+</style>
+</head>
+<body>
+
+<h2>Calculator Functions</h2>
+<div>
+    <label>Square this number:
+        <input type="number" id="square-input" size="2">
+    </label>
+    <button id="square-button">Calculate</button>
+</div>
+
+<div>
+    <label>Half this number:
+        <input type="number" id="half-input" size="2">
+    </label>
+    <button id="half-button">Calculate</button>
+</div>
+
+<div id="solution"></div>
+
+<h2>Verification Code</h2>
+<div>
+    <p>Enter the code shown below:</p>
+    <p id="generated-code"></p>
+    <input type="text" id="user-input" />
+    <button id="submit-button" disabled>Submit</button>
+</div>
+
+<h2>Contact Form</h2>
+<form>
+    <label for="contact-select">Choose an option:</label>
+    <select id="contact-select">
+        <option value="">Select an option</option>
+        <option value="option1">Option 1</option>
+        <option value="option2">Option 2</option>
+    </select>
+    <div id="option1-field" class="hidden">
+        <label>Option 1 Input:</label>
+        <input type="text" id="option1-input" />
+    </div>
+    <div id="option2-field" class="hidden">
+        <label>Option 2 Input:</label>
+        <input type="text" id="option2-input" />
+    </div>
+    <div>
+        <label>Description:</label>
+        <input type="text" id="description-input" placeholder="Click here to see info">
+        <div id="info-box" class="info-box">This is an information box that appears when you click on the description text bar.</div>
+    </div>
+</form>
+
+<script>
+    // Calculator Functions
+    function calculateSquare() {
+        const input = parseFloat(document.getElementById("square-input").value);
+        document.getElementById("solution").innerHTML = `Squared: ${input * input}`;
+    }
+
+    function calculateHalf() {
+        const input = parseFloat(document.getElementById("half-input").value);
+        document.getElementById("solution").innerHTML = `Half: ${input / 2}`;
+    }
+
+    document.getElementById("square-button").addEventListener("click", calculateSquare);
+    document.getElementById("half-button").addEventListener("click", calculateHalf);
+
+    // Verification Code
+    const code = Math.floor(1000 + Math.random() * 9000); // Generates a 4-digit code
+    document.getElementById("generated-code").innerText = code;
+
+    document.getElementById("user-input").addEventListener("input", function() {
+        const userInput = document.getElementById("user-input").value.trim();
+        const submitButton = document.getElementById("submit-button");
+        if (userInput === code.toString()) {
+            submitButton.disabled = false;
+            submitButton.classList.add("enabled");
+        } else {
+            submitButton.disabled = true;
+            submitButton.classList.remove("enabled");
+        }
+    });
+
+    // Contact Form Dropdown Logic
+    document.getElementById("contact-select").addEventListener("change", function() {
+        document.getElementById("option1-field").classList.add("hidden");
+        document.getElementById("option2-field").classList.add("hidden");
+
+        const selectedValue = this.value;
+        if (selectedValue === "option1") {
+            document.getElementById("option1-field").classList.remove("hidden");
+        } else if (selectedValue === "option2") {
+            document.getElementById("option2-field").classList.remove("hidden");
+        }
+    });
+
+    // Information Box Display
+    document.getElementById("description-input").addEventListener("focus", function() {
+        document.getElementById("info-box").style.display = "block";
+    });
+
+    document.getElementById("description-input").addEventListener("blur", function() {
+        document.getElementById("info-box").style.display = "none";
+    });
+</script>
+
+</body>
+</html>
